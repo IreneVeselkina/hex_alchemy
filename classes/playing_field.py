@@ -87,5 +87,5 @@ class PlayingField:
         :param cell_neighbour: Ячейка сосед
         """
         if cell_neighbour.filling:
-            return self.parents_elements.get(tuple(sorted([cell_neighbour.element, cell.element])))
+            return self.parents_elements.get(tuple(sorted([cell_neighbour.element.name, cell.element.name])))
         return None
