@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 from classes.elements import Element, get_dict_parents_elements
 
@@ -38,30 +38,31 @@ class PlayingField:
         self.cells = {}
         self._generate_cells()
         self.parents_elements = get_dict_parents_elements()
+        self.count_empty_cells = len(self.cells)
 
     def _generate_cells(self):
         """Сгенерировать поле."""
         for s in range(-self.size, self.size + 1):
             for q in range(-self.size, self.size + 1):
                 for r in range(-self.size, self.size + 1):
-                    self.cells.update({(s, q, r): Cell(s, q, r)})
+                    if q + r + s == 0:
+                        self.cells.update({(s, q, r): Cell(s, q, r)})
 
-    def get_cell(self, s: int, q: int, r: int) -> Cell:
+    def get_cell(self, *coords: int) -> Cell:
         """Получить ячейку поля по координатам."""
-        return self.cells[(s, q, r)]
+        return self.cells[coords]
 
-    def set_cell(self, s: int, q: int, r: int, element: Element) -> List[Element]:
+    def set_cell(self, element: Element, *coords: int) -> List[Element]:
         """
         Установить элемент ячейке поля.
 
-        :param s: Координата s
-        :param q: Координата q
-        :param r: Координата r
         :param element: Элемент
+        :param coords: Координаты
         :return: Новые элементы, полученные в результате комбинаций с соседними ячейками
         """
-        cell = self.get_cell(s, q, r)
+        cell = self.get_cell(*coords)
         cell.set_element(element)
+        self.count_empty_cells -= 1
         return self.give_new_elements(cell)
 
     def give_new_elements(self, cell: Cell) -> List[Element]:
@@ -72,6 +73,7 @@ class PlayingField:
         """
         new_elements = []
         for s, q, r in self._NEIGHBOUR_COORDS:
+            # ToDO добавить проверку на конец поля
             element = self.get_element(cell, self.get_cell(cell.s + s, cell.q + q, cell.r + r))
             if element:
                 new_elements.append(element)

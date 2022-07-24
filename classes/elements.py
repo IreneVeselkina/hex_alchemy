@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Dict, Tuple
+from typing import Dict, Tuple, List
 
 
 class Element:
@@ -32,8 +32,28 @@ class Elements(Enum):
     sand = Element('sand', 'песок', stone, air)
     metal = Element('metal', 'металл', stone, fire)
 
+    @staticmethod
+    def get_elements_by_names(names: List[str]) -> List[Element]:
+        """Получить элементы по именам."""
+        cards = []
+        for name in names:
+            cards.append(Elements.get_element_by_name(name))
+        return cards
 
-def get_dict_parents_elements() -> Dict[Tuple[str, str]: Element]:
+    @classmethod
+    def get_element_by_name(cls, name: str) -> Element:
+        """
+        Получить элемент по имени.
+
+        :param name: Имя элемента
+        """
+        element = cls.__getattribute__(cls, name)
+        if not element:
+            raise ValueError(f'Не найден элемент по имени {name}')
+        return element.value
+
+
+def get_dict_parents_elements() -> dict:
     """Получить словарь элементов родителей."""
     parents_elements = {}
     for element in Elements:
