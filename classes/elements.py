@@ -5,8 +5,9 @@ from typing import Dict, Tuple
 class Element:
     """Элемент."""
 
-    def __init__(self, name: str, *parents):
+    def __init__(self, name: str, ru_name: str, *parents):
         self.name = name
+        self.ru_name = ru_name
         self.parents = sorted(parents)
 
     def __lt__(self, other):
@@ -16,12 +17,20 @@ class Element:
 class Elements(Enum):
     """Перечень игровых элементов."""
 
-    water = Element('water')
-    ground = Element('ground')
-    air = Element('air')
-    fire = Element('fire')
+    water = Element('water', 'вода')
+    ground = Element('ground', 'земля')
+    air = Element('air', 'воздух')
+    fire = Element('fire', 'огонь')
 
-    steam = Element('steam', fire, water)
+    steam = Element('steam', 'пар', fire, water)
+    energy = Element('energy', 'энергия', fire, air)
+    dust = Element('dust', 'пыль', ground, air)
+    lava = Element('lava', 'лава', ground, fire)
+    swamp = Element('swamp', 'болото', ground, water)
+    alcohol = Element('alcohol', 'алкоголь', fire, air)
+    stone = Element('stone', 'камень', water, lava)
+    sand = Element('sand', 'песок', stone, air)
+    metal = Element('metal', 'металл', stone, fire)
 
 
 def get_dict_parents_elements() -> Dict[Tuple[str, str]: Element]:
