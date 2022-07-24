@@ -23,7 +23,7 @@ class Cell:
 class PlayingField:
     """Игровое поле."""
 
-    # todo
+    # Координаты соседних клеток
     _NEIGHBOUR_COORDS = [
         (1, 0, -1),
         (1, -1, 0),
@@ -35,7 +35,7 @@ class PlayingField:
 
     def __init__(self, size: int):
         self.size = size
-        self.fields = {} # todo
+        self.cells = {}
         self._generate_cells()
         self.parents_elements = get_dict_parents_elements()
 
@@ -44,11 +44,11 @@ class PlayingField:
         for s in range(-self.size, self.size + 1):
             for q in range(-self.size, self.size + 1):
                 for r in range(-self.size, self.size + 1):
-                    self.fields.update({(s, q, r): Cell(s, q, r)})
+                    self.cells.update({(s, q, r): Cell(s, q, r)})
 
     def get_cell(self, s: int, q: int, r: int) -> Cell:
         """Получить ячейку поля по координатам."""
-        return self.fields[(s, q, r)]
+        return self.cells[(s, q, r)]
 
     def set_cell(self, s: int, q: int, r: int, element: Element) -> List[Element]:
         """
@@ -64,7 +64,7 @@ class PlayingField:
         cell.set_element(element)
         return self.give_new_elements(cell)
 
-    def give_new_elements(self, cell: Cell): # todo
+    def give_new_elements(self, cell: Cell) -> List[Element]:
         """
         Получить новые элементы по соседним ячейкам.
 
@@ -81,7 +81,7 @@ class PlayingField:
         """
         Получить элемент в результате комбинации 2х ячеек, если он есть.
 
-        :param cell: Новая ячейка
+        :param cell: Новая ячейка.
         :param cell_neighbour: Ячейка сосед
         """
         if cell_neighbour.filling:
